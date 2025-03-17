@@ -23,7 +23,7 @@ jobs:
       - name: add /usr/local/bin to PATH
         run: echo "/usr/local/bin" >> $GITHUB_PATH
       - name: check wiz
-        run: wizcli --version
+        run: wiz version
 
   install-terraform:
     runs-on: ubuntu-latest
