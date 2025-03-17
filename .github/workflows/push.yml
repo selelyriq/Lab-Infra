@@ -15,7 +15,9 @@ jobs:
     name: install wiz
     steps:
       - name: install wiz
-        run: curl -o wizcli https://wizcli.app.wiz.io/latest/wizcli
+        run:     curl -o wizcli https://downloads.wiz.io/wizcli/latest/wizcli-linux-amd64
+        run: chmod +x wizcli
+        run: sudo mv wizcli /usr/local/bin/
       - name: check wiz
         run: wiz --version
 
