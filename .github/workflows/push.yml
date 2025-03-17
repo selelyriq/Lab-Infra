@@ -1,0 +1,49 @@
+name: on push
+
+on:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  install-wiz:
+    runs-on: ubuntu-latest
+    name: install wiz
+    steps:
+      - name: install wiz
+        run: curl -o wizcli https://wizcli.app.wiz.io/latest/wizcli
+      - name: check wiz
+        run: wiz --version
+
+  install-terraform:
+    runs-on: ubuntu-latest
+    name: install terraform
+    steps:
+      - name: install terraform
+        run: curl -o terraform.zip https://releases.hashicorp.com/terraform/1.5.5/terraform_1.5.5_linux_amd64.zip
+      - name: install terraform
+        run: unzip terraform.zip
+      - name: check terraform
+        run: terraform --version
+
+  output-tfplan:
+    needs: install-wiz
+    runs-on: ubuntu-latest
+    name: output tfplan
+    steps:
+      - name: output tfplan
+        run: terraform plan -out=tfplan.json && terraform show -json plan.tfplan
+
+  wiz-cicd-scan:
+    needs: output-tfplan
+    runs-on: ubuntu-latest
+    name: wiz cicd scan
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4 #This action checks-out your repository under $GITHUB_WORKSPACE, so your workflow can access it.
+      - name: Run wiz cicd scan
+        run: wiz scan terraform tfplan.json --fail-on-critical --fail-on-high
