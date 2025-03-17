@@ -40,6 +40,22 @@ jobs:
       - name: check terraform
         run: terraform --version
 
+  init-terraform:
+    needs: install-terraform
+    runs-on: ubuntu-latest
+    name: init terraform
+    steps:
+      - name: init terraform
+        run: terraform init
+
+  validate-terraform:
+    needs: install-terraform
+    runs-on: ubuntu-latest
+    name: validate terraform
+    steps:
+      - name: validate terraform
+        run: terraform validate
+
   output-tfplan:
     needs: install-wiz
     runs-on: ubuntu-latest
