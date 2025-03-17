@@ -45,6 +45,8 @@ jobs:
     runs-on: ubuntu-latest
     name: init terraform
     steps:
+      - name: checkout repository
+        uses: actions/checkout@v4
       - name: init terraform
         run: terraform init
 
@@ -53,14 +55,28 @@ jobs:
     runs-on: ubuntu-latest
     name: validate terraform
     steps:
+      - name: checkout repository
+        uses: actions/checkout@v4
       - name: validate terraform
         run: terraform validate
 
+  format-terraform:
+    needs: validate-terraform
+    runs-on: ubuntu-latest
+    name: format terraform
+    steps:
+      - name: checkout repository
+        uses: actions/checkout@v4
+      - name: format terraform
+        run: terraform fmt
+
   output-tfplan:
-    needs: install-wiz
+    needs: format-terraform
     runs-on: ubuntu-latest
     name: output tfplan
     steps:
+      - name: checkout repository
+        uses: actions/checkout@v4
       - name: output tfplan
         run: terraform plan -out=tfplan.json && terraform show -json plan.tfplan
 
@@ -69,7 +85,8 @@ jobs:
     runs-on: ubuntu-latest
     name: wiz cicd scan
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4 #This action checks-out your repository under $GITHUB_WORKSPACE, so your workflow can access it.
-      - name: Run wiz cicd scan
+      - name: checkout repository
+        uses: actions/checkout@v4
+      - name: run wiz cicd scan
         run: wiz scan terraform tfplan.json --fail-on-critical --fail-on-high
+
