@@ -6,6 +6,8 @@ jobs:
   push:
     runs-on: ubuntu-latest
     steps:
+    - name: checkout
+      uses: actions/checkout@v4
     - name: first action
       run: echo "Hello World"
 
