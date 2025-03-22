@@ -1,56 +1,16 @@
-name: on push
+name: push
 
-on:
-  push:
-    branches:
-      - main
-
-permissions:
-  contents: write
-  pull-requests: write
+on: push
 
 jobs:
-  terraform:
+  push:
     runs-on: ubuntu-latest
-    name: Terraform
     steps:
-      - name: checkout repository
-        uses: actions/checkout@v4
-      
-      - name: Setup Terraform
-        uses: hashicorp/setup-terraform@v3
-        with:
-          terraform_version: 1.5.5
+    - name: first action
+      run: echo "Hello World"
 
-      - name: Terraform Init
-        run: terraform init
-      
-      - name: Terraform Format
-        run: terraform fmt -check
-      
-      - name: Terraform Validate
-        run: terraform validate
+    - name: list files
+      run: ls -la
 
-      - name: Terraform Plan
-        run: terraform plan -out=tfplan.json
-      
-      - name: Show Plan
-        run: terraform show -json tfplan.json
-
-  wiz-cicd-scan:
-    needs: terraform
-    runs-on: ubuntu-latest
-    name: wiz cicd scan
-    steps:
-      - name: checkout repository
-        uses: actions/checkout@v4
-      
-      - name: install wiz
-        run: |
-          curl -o wizcli https://downloads.wiz.io/wizcli/latest/wizcli-linux-amd64
-          chmod +x wizcli
-          sudo mv wizcli /usr/local/bin/wiz
-          
-      - name: run wiz cicd scan
-        run: wiz scan terraform tfplan.json --fail-on-critical --fail-on-high
-
+    - name: read file
+      run: cat README.md
