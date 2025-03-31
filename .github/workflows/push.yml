@@ -3,16 +3,44 @@ name: push
 on: push
 
 jobs:
-  push:
+  checkov:
     runs-on: ubuntu-latest
     steps:
-    - name: checkout
-      uses: actions/checkout@v4
-    - name: first action
-      run: echo "Hello World"
+      - name: checkout
+        uses: actions/checkout@v4
+      - name: Checkov GitHub Action
+        uses: bridgecrewio/checkov-action@v12
+        with:
+          # This will add both a CLI output to the console and create a results.sarif file
+          output_format: cli,sarif
+          output_file_path: console,results.sarif
+    
+  format:
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout
+        uses: actions/checkout@v4
+      - name: format
+        uses: hashicorp/setup-terraform@v4
+      - name: format
+        run: terraform fmt -recursive
 
-    - name: list files
-      run: ls -la
+  terraform-validate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout
+        uses: actions/checkout@v4
+      - name: validate
+        uses: hashicorp/setup-terraform@v4
+      - name: validate
+        run: terraform validate
 
-    - name: read file
-      run: cat ./README.md
+  terraform-plan:
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout
+        uses: actions/checkout@v4
+      - name: plan
+        uses: hashicorp/setup-terraform@v4
+      - name: plan
+        run: terraform plan -out=plan.tfplan
