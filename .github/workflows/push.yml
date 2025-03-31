@@ -2,6 +2,10 @@ name: push
 
 on: push
 
+permissions: # Explicitly declare minimal required permissions
+  contents: read
+  security-events: write # Needed for uploading SARIF results
+
 jobs:
   checkov:
     runs-on: ubuntu-latest
