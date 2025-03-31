@@ -25,12 +25,10 @@ jobs:
     steps:
       - name: checkout
         uses: actions/checkout@v4
-      - name: format
-        uses: hashicorp/setup-terraform@v4
-        with:
-          terraform_version: 1.8.0
-          command: fmt
-          args: -recursive
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+      - name: Terraform Format
+        run: terraform fmt -check -recursive
 
   terraform-validate:
     needs: format
@@ -38,11 +36,12 @@ jobs:
     steps:
       - name: checkout
         uses: actions/checkout@v4
-      - name: validate
-        uses: hashicorp/setup-terraform@v4
-        with:
-          terraform_version: 1.8.0
-          command: validate
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+      - name: Terraform Init
+        run: terraform init
+      - name: Terraform Validate
+        run: terraform validate
 
   terraform-plan:
     needs: terraform-validate
@@ -50,9 +49,9 @@ jobs:
     steps:
       - name: checkout
         uses: actions/checkout@v4
-      - name: plan
-        uses: hashicorp/setup-terraform@v4
-        with:
-          terraform_version: 1.8.0
-          command: plan
-          args: -out=plan.tfplan
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+      - name: Terraform Init
+        run: terraform init
+      - name: Terraform Plan
+        run: terraform plan -out=plan.tfplan
