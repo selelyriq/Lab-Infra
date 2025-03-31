@@ -16,31 +16,39 @@ jobs:
           output_file_path: console,results.sarif
     
   format:
+    needs: checkov
     runs-on: ubuntu-latest
     steps:
       - name: checkout
         uses: actions/checkout@v4
       - name: format
         uses: hashicorp/setup-terraform@v4
-      - name: format
-        run: terraform fmt -recursive
+        with:
+          terraform_version: 1.8.0
+          command: fmt
+          args: -recursive
 
   terraform-validate:
+    needs: format
     runs-on: ubuntu-latest
     steps:
       - name: checkout
         uses: actions/checkout@v4
       - name: validate
         uses: hashicorp/setup-terraform@v4
-      - name: validate
-        run: terraform validate
+        with:
+          terraform_version: 1.8.0
+          command: validate
 
   terraform-plan:
+    needs: terraform-validate
     runs-on: ubuntu-latest
     steps:
       - name: checkout
         uses: actions/checkout@v4
       - name: plan
         uses: hashicorp/setup-terraform@v4
-      - name: plan
-        run: terraform plan -out=plan.tfplan
+        with:
+          terraform_version: 1.8.0
+          command: plan
+          args: -out=plan.tfplan
