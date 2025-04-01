@@ -5,9 +5,8 @@
 # *.tfstate.*
 *.tfplan
 *.tfplan.*
-*.tfvars
-!example.tfvars
-*.tfvars.json
+# *.tfvars
+# *.tfvars.json
 
 # Crash log files
 crash.log
