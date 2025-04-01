@@ -3,8 +3,8 @@ name: push
 on: push
 
 permissions: # Explicitly declare minimal required permissions
+  id-token: write
   contents: read
-  security-events: write # Needed for uploading SARIF results
 
 jobs:
   checkov:
@@ -51,6 +51,12 @@ jobs:
         uses: actions/checkout@v4
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v3
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-region: us-east-1
+          role-to-assume: arn:aws:iam::291847254387:role/GitHub_LabInfra
+          role-session-name: GitHub_LabInfra
       - name: Terraform Init
         run: terraform init
       - name: Terraform Plan
