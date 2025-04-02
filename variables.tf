@@ -8,9 +8,9 @@ variable "name" {
   description = "The name of the instance"
 }
 
-variable "ami" {
+variable "ami_id" {
   type        = string
-  description = "The AMI to use for the instance"
+  description = "The AMI ID to use for the instance"
 }
 
 variable "vpc_id" {
