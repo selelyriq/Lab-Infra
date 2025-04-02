@@ -69,34 +69,8 @@ jobs:
           name: plan.tfplan
           path: .
 
-  # terraform-apply:
-  #   needs: terraform-plan
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - name: checkout
-  #       uses: actions/checkout@v4
-  #     - name: Setup Terraform
-  #       uses: hashicorp/setup-terraform@v3
-  #     - name: Configure AWS Credentials
-  #       uses: aws-actions/configure-aws-credentials@v4
-  #       with:
-  #         aws-region: us-east-1
-  #         role-to-assume: arn:aws:iam::291847254387:role/GitHub_LabInfra
-  #         role-session-name: GitHub_LabInfra
-  #     - name: Download Terraform Plan
-  #       uses: actions/download-artifact@v4
-  #       with:
-  #         name: plan.tfplan
-  #         path: .
-  #     - name: Terraform Init
-  #       run: terraform init
-  #     - name: Terraform Apply
-  #       run: terraform apply plan.tfplan
-  #       env:
-  #         TF_LOG: DEBUG
-
-  terraform-destroy:
-    needs: terraform-validate
+  terraform-apply:
+    needs: terraform-plan
     runs-on: ubuntu-latest
     steps:
       - name: checkout
@@ -109,9 +83,14 @@ jobs:
           aws-region: us-east-1
           role-to-assume: arn:aws:iam::291847254387:role/GitHub_LabInfra
           role-session-name: GitHub_LabInfra
+      - name: Download Terraform Plan
+        uses: actions/download-artifact@v4
+        with:
+          name: plan.tfplan
+          path: .
       - name: Terraform Init
         run: terraform init
-      - name: Terraform destroy
-        run: terraform destroy -auto-approve
+      - name: Terraform Apply
+        run: terraform apply plan.tfplan
         env:
           TF_LOG: DEBUG
