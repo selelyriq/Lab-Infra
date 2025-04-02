@@ -11,7 +11,6 @@ variable "name" {
 variable "ami" {
   type        = string
   description = "The AMI to use for the instance"
-  default     = "ami-053b0d53c279acc90"
 }
 
 variable "vpc_id" {
