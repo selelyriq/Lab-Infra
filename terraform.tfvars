@@ -1,4 +1,5 @@
 instance_type = "t2.micro"
+ami           = "ami-067cd34246e68938e"
 name          = "terraform-ec2"
 user_data     = "echo 'Hello, World!'"
 tags = {

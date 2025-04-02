@@ -7,6 +7,7 @@ variable "name" {
   type        = string
   description = "The name of the instance"
 }
+
 variable "ami" {
   type        = string
   description = "The AMI to use for the instance"
