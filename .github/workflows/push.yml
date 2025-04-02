@@ -63,6 +63,13 @@ jobs:
         run: terraform plan -out=plan.tfplan
         env:
           TF_LOG: DEBUG
+      - name: Upload Terraform Plan
+        uses: actions/upload-artifact@v4
+        with:
+          name: plan.tfplan
+          path: plan.tfplan
+
+        
 
   terraform-apply:
     needs: terraform-plan
@@ -78,6 +85,13 @@ jobs:
           aws-region: us-east-1
           role-to-assume: arn:aws:iam::291847254387:role/GitHub_LabInfra
           role-session-name: GitHub_LabInfra
+      - name: Download Terraform Plan
+        uses: actions/download-artifact@v4
+        with:
+          name: plan.tfplan
+          path: plan.tfplan
+      - name: Terraform Init
+        run: terraform init
       - name: Terraform Apply
         run: terraform apply plan.tfplan
         env:
