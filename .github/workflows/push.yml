@@ -90,7 +90,7 @@ jobs:
           path: .
       - name: Terraform Init
         run: terraform init
-      - name: Terraform Apply
-        run: terraform apply plan.tfplan
+      - name: Terraform destroy
+        run: terraform destroy -auto-approve
         env:
           TF_LOG: DEBUG
