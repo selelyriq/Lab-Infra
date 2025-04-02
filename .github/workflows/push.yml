@@ -63,3 +63,22 @@ jobs:
         run: terraform plan -out=plan.tfplan
         env:
           TF_LOG: DEBUG
+
+  terraform-apply:
+    needs: terraform-plan
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout
+        uses: actions/checkout@v4
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-region: us-east-1
+          role-to-assume: arn:aws:iam::291847254387:role/GitHub_LabInfra
+          role-session-name: GitHub_LabInfra
+      - name: Terraform Apply
+        run: terraform apply plan.tfplan
+        env:
+          TF_LOG: DEBUG
