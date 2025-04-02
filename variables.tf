@@ -25,6 +25,11 @@ variable "user_data" {
   default     = "echo 'Hello, World!'"
 }
 
+variable "subnet_id" {
+  type        = string
+  description = "The subnet ID to use for the instance"
+}
+
 variable "tags" {
   type        = map(string)
   description = "The tags to use for the instance"
